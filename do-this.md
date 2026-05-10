@@ -68,6 +68,22 @@ Create each page and assign it to the matching template in the page settings:
 
 Write the actual content for each page in the rich-text editor.
 
+**About page — paste this text into the rich-text editor for the `about` page:**
+
+> My name is Iman Pour Navab, founder of DYNAMISE® (dy·na·mize). I'm representing two generations of a family that has been serving the health industry.
+>
+> I learned about the art of extraction and natural supplements from my dad who was a pharmacist. In one of the pictures shown above he displayed Ginseng root extract product.
+>
+> I named my company Dynamise, which means 'energized' as I wanted to make effective and dynamized natural medicine, and to continue my father's journey.
+>
+> I studied a six-year natural medicine program in the CCHH in Ontario. I'm a botanist, herbalist, a registered homeopath healthcare provider, and also president of the Applied Research in Homeopathy Foundation of Canada (arhfc.ca), a not-for-profit research organization.
+>
+> I wrote two books, one is about "Miasma of Cancer", and the other one is called: "An Interview with Dr. Samuel Hahnemann".
+>
+> Together, let's make natural products that are safe for everyone and environment.
+
+Upload any photos of Iman and his father's work to the page using the media embed in the rich-text editor — the text above references "pictures shown above."
+
 ---
 
 ## 5. Shopify admin → Collections

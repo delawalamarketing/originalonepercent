@@ -14,7 +14,7 @@
       "settings": {
         "eyebrow": "Original 1% by DYNAMISE",
         "heading": "Skincare and stillness, made by hand in Canada.",
-        "subheading": "Formulated by a certified esthetician and breast cancer survivor in our own Health-Canada-registered Canadian facility.",
+        "subheading": "Formulated by a certified esthetician, botanist, and registered homeopath in our own Health-Canada-registered Canadian facility in Ontario.",
         "cta_primary_text": "Shop the Cosmic Meditation Set",
         "cta_primary_link": "shopify://products/cosmic-meditation-set",
         "cta_secondary_text": "Read our story",
@@ -118,9 +118,9 @@
       "settings": {
         "media_position": "left",
         "eyebrow": "Why this exists",
-        "heading": "I built this from the bottom of a hospital bed.",
-        "body": "<p>After a breast cancer diagnosis, I went looking for skincare I could actually trust on my changed, sensitive skin — and couldn't find it. So I built it. Original 1% is what came out of that search: clean, esthetician-formulated, made by hand in our own Canadian facility. The 1% is the part of you that's irreplaceable. This is for that part.</p>",
-        "signature": "— Founder, Original 1%",
+        "heading": "Two generations in service of natural health.",
+        "body": "<p>My name is Iman Pour Navab, and I named this company DYNAMISE — it means 'energized.' I learned the art of extraction and natural supplements from my father, a pharmacist. I studied a six-year natural medicine program at the CCHH in Ontario. I'm a botanist, herbalist, and registered homeopath. Original 1% carries that lineage forward: clean, esthetician-formulated, made by hand in our own Health-Canada-registered Canadian facility. The 1% is the part of you that's irreplaceable. This is for that part.</p>",
+        "signature": "— Iman Pour Navab, Founder, DYNAMISE®",
         "cta_text": "Read the full story",
         "cta_link": "shopify://pages/about",
         "color_scheme": "scheme-1"
@@ -162,7 +162,7 @@
         "book_1": {
           "type": "book",
           "settings": {
-            "title": "Original 1%: From Junk to Genius",
+            "title": "Miasma of Cancer",
             "subtitle": "",
             "pull_quote": "",
             "cta_text": "Read a chapter free",
@@ -172,8 +172,7 @@
         "book_2": {
           "type": "book",
           "settings": {
-            "cover_image": "shopify://shop_images/Original_1_Saqi_SVGs.svg",
-            "title": "Saqi: A Tale of Divine Presence",
+            "title": "An Interview with Dr. Samuel Hahnemann",
             "subtitle": "",
             "pull_quote": "",
             "cta_text": "Read a chapter free",
