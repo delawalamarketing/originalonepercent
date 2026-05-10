@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero_founder": {
@@ -22,6 +31,7 @@
         "pillar_1": {
           "type": "pillar",
           "settings": {
+            "icon": "shopify://shop_images/Made_in_Canada_SVG.svg",
             "heading": "Made in Canada",
             "description": "Hand-formulated and bottled in our Ontario lab."
           }
@@ -29,6 +39,7 @@
         "pillar_2": {
           "type": "pillar",
           "settings": {
+            "icon": "shopify://shop_images/ECO_CERT.svg",
             "heading": "ECOCERT & Health Canada GMP",
             "description": "Manufactured under independent quality certifications."
           }
@@ -41,8 +52,13 @@
           }
         }
       },
-      "block_order": ["pillar_1", "pillar_2", "pillar_3"],
+      "block_order": [
+        "pillar_1",
+        "pillar_2",
+        "pillar_3"
+      ],
       "settings": {
+        "heading": "",
         "color_scheme": "scheme-1"
       }
     },
@@ -54,6 +70,8 @@
           "settings": {
             "title": "The Morning Ritual",
             "description": "Begin the day with five minutes of stillness and skin that feels alive.",
+            "price": "",
+            "savings_badge_text": "",
             "cta_text": "Build this ritual",
             "link": "shopify://pages/morning-ritual"
           }
@@ -63,6 +81,8 @@
           "settings": {
             "title": "The Inner Work Bundle",
             "description": "For the seasons when the work is internal.",
+            "price": "",
+            "savings_badge_text": "",
             "cta_text": "Build this ritual",
             "link": "shopify://pages/inner-work"
           }
@@ -72,12 +92,18 @@
           "settings": {
             "title": "The Survivor's Set",
             "description": "Made for skin that's been through something. Fragrance-free, gentle, gift-ready.",
+            "price": "",
+            "savings_badge_text": "",
             "cta_text": "Build this ritual",
             "link": "shopify://pages/survivors-set"
           }
         }
       },
-      "block_order": ["ritual_morning", "ritual_inner_work", "ritual_survivors"],
+      "block_order": [
+        "ritual_morning",
+        "ritual_inner_work",
+        "ritual_survivors"
+      ],
       "settings": {
         "eyebrow": "The Rituals",
         "heading": "Three rituals, made for the seasons of you.",
@@ -101,14 +127,15 @@
     "featured_products": {
       "type": "featured-products",
       "settings": {
+        "eyebrow": "",
         "heading": "Made with care, in small batches.",
         "cta_text": "Shop all",
         "cta_link": "shopify://collections/all",
         "product_list": [
-          "shopify://products/cosmic-meditation-set",
-          "shopify://products/rice-toner",
-          "shopify://products/rice-silk-serum",
-          "shopify://products/orchid-lotion"
+          "cosmic-meditation-set",
+          "rice-toner",
+          "rice-silk-serum",
+          "orchid-lotion"
         ],
         "columns_desktop": 4,
         "color_scheme": "scheme-1"
@@ -117,6 +144,7 @@
     "reviews_wall": {
       "type": "reviews-wall",
       "settings": {
+        "eyebrow": "",
         "heading": "Stories from our community.",
         "subheading": "",
         "show_empty_state": true,
@@ -133,18 +161,28 @@
           "type": "book",
           "settings": {
             "title": "Original 1%: From Junk to Genius",
-            "cta_text": "Read a chapter free"
+            "subtitle": "",
+            "pull_quote": "",
+            "cta_text": "Read a chapter free",
+            "cta_link": ""
           }
         },
         "book_2": {
           "type": "book",
           "settings": {
+            "cover_image": "shopify://shop_images/Original_1_Saqi_SVGs.svg",
             "title": "Saqi: A Tale of Divine Presence",
-            "cta_text": "Read a chapter free"
+            "subtitle": "",
+            "pull_quote": "",
+            "cta_text": "Read a chapter free",
+            "cta_link": ""
           }
         }
       },
-      "block_order": ["book_1", "book_2"],
+      "block_order": [
+        "book_1",
+        "book_2"
+      ],
       "settings": {
         "eyebrow": "Read",
         "heading": "Books from our founder.",
@@ -154,7 +192,9 @@
     "email_capture": {
       "type": "email-capture",
       "settings": {
+        "eyebrow": "",
         "heading": "Get our free 7-day meditation series and clean-beauty ingredient guide.",
+        "body": "",
         "placeholder": "you@example.com",
         "button_text": "Send it to me",
         "success_message": "Thank you. Check your inbox for the first email.",
@@ -167,22 +207,43 @@
       "blocks": {
         "badge_ecocert": {
           "type": "badge",
-          "settings": { "alt_text": "ECOCERT", "label": "ECOCERT" }
+          "settings": {
+            "alt_text": "ECOCERT",
+            "label": "ECOCERT",
+            "link": ""
+          }
         },
         "badge_hc": {
           "type": "badge",
-          "settings": { "alt_text": "Health Canada GMP", "label": "Health Canada GMP" }
+          "settings": {
+            "alt_text": "Health Canada GMP",
+            "label": "Health Canada GMP",
+            "link": ""
+          }
         },
         "badge_iso": {
           "type": "badge",
-          "settings": { "alt_text": "ISO certified", "label": "ISO" }
+          "settings": {
+            "alt_text": "ISO certified",
+            "label": "ISO",
+            "link": ""
+          }
         },
         "badge_canada": {
           "type": "badge",
-          "settings": { "alt_text": "Made in Canada", "label": "Made in Canada" }
+          "settings": {
+            "alt_text": "Made in Canada",
+            "label": "Made in Canada",
+            "link": ""
+          }
         }
       },
-      "block_order": ["badge_ecocert", "badge_hc", "badge_iso", "badge_canada"],
+      "block_order": [
+        "badge_ecocert",
+        "badge_hc",
+        "badge_iso",
+        "badge_canada"
+      ],
       "settings": {
         "heading": "Independently certified",
         "color_scheme": "scheme-1"
