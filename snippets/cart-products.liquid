@@ -25,6 +25,8 @@
     style="--product-title-case: uppercase;"
   {% endif %}
 >
+  {% render 'free-shipping-bar' %}
+
   {% if cart.empty? %}
     {%- if shop.customer_accounts_enabled and customer == null -%}
       <p>
@@ -342,6 +344,8 @@
         </table>
       </div>
     </form>
+
+    {% render 'cart-cross-sell' %}
   {%- endif -%}
 </div>
 

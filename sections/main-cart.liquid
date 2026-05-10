@@ -74,6 +74,20 @@
     padding-top: var(--padding-xl);
   }
 
+  /* Mobile sticky checkout button — always reachable on small screens */
+  @media screen and (max-width: 749px) {
+    .cart-page__summary .cart__ctas {
+      position: sticky;
+      bottom: 0;
+      background: var(--color-background);
+      padding-block: 0.75rem;
+      margin-block-start: var(--margin-md);
+      z-index: 5;
+      box-shadow: 0 -4px 16px rgb(0 0 0 / 0.06);
+      padding-block-end: max(0.75rem, env(safe-area-inset-bottom));
+    }
+  }
+
   @media screen and (min-width: 750px) {
     .cart-page {
       grid-template-columns: 1fr min(50vw, var(--sidebar-width));

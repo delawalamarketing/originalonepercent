@@ -51,6 +51,9 @@
     {% paginate collection.products by products_per_page %}
       {% capture children %}
         {% for product in collection.products %}
+          {%- if section.settings.hide_long_term_oos and product.tags contains 'long-term-oos' -%}
+            {%- continue -%}
+          {%- endif -%}
           <li
             id="{{ section.id }}-{{ product.id }}"
             class="product-grid__item product-grid__item--{{ forloop.index0 }}"
@@ -229,6 +232,13 @@
       "step": 4,
       "default": 24,
       "visible_if": "{{ section.settings.enable_infinite_scroll == false }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_long_term_oos",
+      "label": "Hide long-term out-of-stock products",
+      "info": "Hides any product tagged 'long-term-oos' from this collection grid.",
+      "default": false
     },
     {
       "type": "header",

@@ -1,12 +1,14 @@
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
-<section class="rituals color-{{ section.settings.color_scheme }} page-width">
+<section class="rituals color-{{ section.settings.color_scheme }} page-width" aria-labelledby="rituals-heading-{{ section.id }}">
   <header class="rituals__header">
     {%- if section.settings.eyebrow != blank -%}
       <p class="rituals__eyebrow">{{ section.settings.eyebrow }}</p>
     {%- endif -%}
     {%- if section.settings.heading != blank -%}
-      <h2 class="rituals__heading">{{ section.settings.heading }}</h2>
+      <h2 class="rituals__heading" id="rituals-heading-{{ section.id }}">{{ section.settings.heading }}</h2>
+    {%- else -%}
+      <h2 class="visually-hidden" id="rituals-heading-{{ section.id }}">The Rituals</h2>
     {%- endif -%}
     {%- if section.settings.subheading != blank -%}
       <p class="rituals__subheading">{{ section.settings.subheading }}</p>

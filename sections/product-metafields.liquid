@@ -1,0 +1,396 @@
+{%- liquid
+  assign product = closest.product
+  assign mf = product.metafields.custom
+
+  assign benefit_line = mf.benefit_line.value | default: mf.benefit_line
+  assign founder_note = mf.founder_note.value | default: mf.founder_note
+  assign benefits = mf.benefits.value | default: mf.benefits
+  assign ingredients = mf.ingredients_with_origin.value | default: mf.ingredients_with_origin
+  assign how_to_use = mf.how_to_use.value | default: mf.how_to_use
+
+  assign free_from_list = mf.free_from.value | default: mf.free_from
+  if free_from_list == blank
+    assign free_from_list = 'Parabens,Phthalates,Synthetic fragrance,Dyes,Sulfates' | split: ','
+  endif
+-%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<section class="product-metafields color-{{ section.settings.color_scheme }} page-width">
+  {%- if section.settings.show_benefit_line and benefit_line != blank -%}
+    <p class="product-metafields__benefit-line">{{ benefit_line }}</p>
+  {%- endif -%}
+
+  {%- if section.settings.show_founder_note and founder_note != blank -%}
+    <div class="product-metafields__block product-metafields__founder">
+      {%- if section.settings.founder_heading != blank -%}
+        <h2 class="product-metafields__heading">{{ section.settings.founder_heading }}</h2>
+      {%- endif -%}
+      <div class="product-metafields__founder-body rte">{{ founder_note }}</div>
+    </div>
+  {%- endif -%}
+
+  {%- if section.settings.show_benefits and benefits != blank -%}
+    <div class="product-metafields__block">
+      <ul class="product-metafields__benefits" role="list">
+        {%- for benefit in benefits -%}
+          <li class="product-metafields__benefit-item">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+              <path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>{{ benefit }}</span>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  {%- endif -%}
+
+  {%- if section.settings.show_ingredients and ingredients != blank -%}
+    <details class="product-metafields__block product-metafields__details">
+      <summary class="product-metafields__summary">
+        <span>{{ section.settings.ingredients_heading }}</span>
+        <svg class="product-metafields__caret" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </summary>
+      <div class="product-metafields__details-body rte">{{ ingredients }}</div>
+    </details>
+  {%- endif -%}
+
+  {%- if section.settings.show_free_from -%}
+    <details class="product-metafields__block product-metafields__details">
+      <summary class="product-metafields__summary">
+        <span>{{ section.settings.free_from_heading }}</span>
+        <svg class="product-metafields__caret" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </summary>
+      <div class="product-metafields__details-body">
+        <ul class="product-metafields__free-from" role="list">
+          {%- for item in free_from_list -%}
+            <li>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                <path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              <span>{{ item }}</span>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    </details>
+  {%- endif -%}
+
+  {%- if section.settings.show_how_to_use and how_to_use != blank -%}
+    <div class="product-metafields__block">
+      {%- if section.settings.how_to_use_heading != blank -%}
+        <h2 class="product-metafields__heading">{{ section.settings.how_to_use_heading }}</h2>
+      {%- endif -%}
+      <ol class="product-metafields__steps" role="list">
+        {%- for step in how_to_use -%}
+          <li class="product-metafields__step">
+            <span class="product-metafields__step-number" aria-hidden="true">{{ forloop.index }}</span>
+            <span class="product-metafields__step-text">{{ step }}</span>
+          </li>
+        {%- endfor -%}
+      </ol>
+    </div>
+  {%- endif -%}
+</section>
+
+{% stylesheet %}
+  .product-metafields {
+    padding-block: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 760px;
+    margin-inline: auto;
+  }
+
+  .product-metafields__benefit-line {
+    font-size: clamp(1.125rem, 2vw, 1.25rem);
+    line-height: 1.45;
+    margin: 0;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+  }
+
+  .product-metafields__block {
+    margin: 0;
+  }
+
+  .product-metafields__heading {
+    font-size: 1.125rem;
+    font-weight: 500;
+    margin: 0 0 0.75rem;
+    letter-spacing: -0.005em;
+  }
+
+  .product-metafields__founder-body {
+    font-size: 1rem;
+    line-height: 1.65;
+    opacity: 0.9;
+  }
+
+  .product-metafields__founder-body p {
+    margin: 0 0 0.75rem;
+  }
+
+  .product-metafields__founder-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  .product-metafields__benefits {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .product-metafields__benefit-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.95rem;
+  }
+
+  .product-metafields__benefit-item svg {
+    flex-shrink: 0;
+  }
+
+  .product-metafields__details {
+    border-top: 1px solid currentColor;
+    border-color: rgba(0, 0, 0, 0.12);
+    padding-block: 0.5rem;
+  }
+
+  .product-metafields__details:last-of-type {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  }
+
+  .product-metafields__summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-block: 0.875rem;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.95rem;
+    list-style: none;
+    min-height: 44px;
+  }
+
+  .product-metafields__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .product-metafields__summary:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+
+  .product-metafields__caret {
+    transition: transform 200ms ease;
+  }
+
+  .product-metafields__details[open] .product-metafields__caret {
+    transform: rotate(180deg);
+  }
+
+  .product-metafields__details-body {
+    padding-block: 0.5rem 1rem;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    opacity: 0.9;
+  }
+
+  .product-metafields__details-body p {
+    margin: 0 0 0.75rem;
+  }
+
+  .product-metafields__details-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  .product-metafields__free-from {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.5rem 1rem;
+  }
+
+  .product-metafields__free-from li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .product-metafields__free-from svg {
+    flex-shrink: 0;
+    opacity: 0.6;
+  }
+
+  .product-metafields__steps {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+  }
+
+  .product-metafields__step {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .product-metafields__step-number {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-top: 0.05rem;
+  }
+
+  @media (min-width: 750px) {
+    .product-metafields__benefits {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product metafields",
+  "tag": "section",
+  "class": "section-product-metafields",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Renders metafields under namespace 'custom'. Create the metafield definitions in Settings → Custom data → Products. Each block toggles independently — sections without a value stay hidden."
+    },
+    {
+      "type": "header",
+      "content": "Benefit line"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_benefit_line",
+      "label": "Show benefit line",
+      "default": true,
+      "info": "Reads custom.benefit_line (single line text)."
+    },
+    {
+      "type": "header",
+      "content": "Founder note"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_founder_note",
+      "label": "Show founder note",
+      "default": true,
+      "info": "Reads custom.founder_note (multi-line / rich text)."
+    },
+    {
+      "type": "text",
+      "id": "founder_heading",
+      "label": "Founder note heading",
+      "default": "Why this exists"
+    },
+    {
+      "type": "header",
+      "content": "Benefit icons"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_benefits",
+      "label": "Show benefit list",
+      "default": true,
+      "info": "Reads custom.benefits (list of single-line text)."
+    },
+    {
+      "type": "header",
+      "content": "Ingredients"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_ingredients",
+      "label": "Show ingredients",
+      "default": true,
+      "info": "Reads custom.ingredients_with_origin (multi-line / rich text)."
+    },
+    {
+      "type": "text",
+      "id": "ingredients_heading",
+      "label": "Ingredients heading",
+      "default": "Full ingredients with origin"
+    },
+    {
+      "type": "header",
+      "content": "Free from"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_free_from",
+      "label": "Show free-from list",
+      "default": true,
+      "info": "Reads custom.free_from (list of single-line text). Falls back to default list if empty."
+    },
+    {
+      "type": "text",
+      "id": "free_from_heading",
+      "label": "Free-from heading",
+      "default": "Free from"
+    },
+    {
+      "type": "header",
+      "content": "How to use"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_how_to_use",
+      "label": "Show how-to-use steps",
+      "default": true,
+      "info": "Reads custom.how_to_use (list of single-line text). Renders as numbered steps."
+    },
+    {
+      "type": "text",
+      "id": "how_to_use_heading",
+      "label": "How-to-use heading",
+      "default": "How to use"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product metafields"
+    }
+  ]
+}
+{% endschema %}

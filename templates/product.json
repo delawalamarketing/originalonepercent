@@ -264,6 +264,50 @@
         "padding-block-end": 0
       }
     },
+    "product_metafields": {
+      "type": "product-metafields",
+      "settings": {
+        "show_benefit_line": true,
+        "show_founder_note": true,
+        "founder_heading": "Why this exists",
+        "show_benefits": true,
+        "show_ingredients": true,
+        "ingredients_heading": "Full ingredients with origin",
+        "show_free_from": true,
+        "free_from_heading": "Free from",
+        "show_how_to_use": true,
+        "how_to_use_heading": "How to use",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "product_back_in_stock": {
+      "type": "product-back-in-stock",
+      "settings": {
+        "eyebrow": "",
+        "heading": "Notify me when {{ product }} is back",
+        "body": "We'll email you the moment we have stock again. No spam, ever.",
+        "placeholder": "you@example.com",
+        "button_text": "Notify me",
+        "success_message": "You're on the list. We'll email when this is back in stock.",
+        "privacy_text": "We'll only use your email to notify you about this product. Unsubscribe anytime.",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "product_reviews_placeholder": {
+      "type": "product-reviews-placeholder",
+      "settings": {
+        "heading": "Reviews",
+        "show_empty_state": true,
+        "empty_text": "Reviews will appear here once your review widget is installed.",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "product_sticky_atc": {
+      "type": "product-sticky-atc",
+      "settings": {
+        "button_text": "Add to cart"
+      }
+    },
     "product_recommendations_qggXJq": {
       "type": "product-recommendations",
       "blocks": {
@@ -408,6 +452,10 @@
   },
   "order": [
     "main",
-    "product_recommendations_qggXJq"
+    "product_metafields",
+    "product_back_in_stock",
+    "product_reviews_placeholder",
+    "product_recommendations_qggXJq",
+    "product_sticky_atc"
   ]
 }

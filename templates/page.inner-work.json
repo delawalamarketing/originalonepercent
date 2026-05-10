@@ -1,0 +1,34 @@
+{
+  "sections": {
+    "bundle": {
+      "type": "bundle-page",
+      "settings": {
+        "eyebrow": "The Inner Work Bundle",
+        "heading": "For the seasons when the work is internal.",
+        "subheading": "Stillness, words, and a clean ritual to anchor the day.",
+        "inside_heading": "What's inside",
+        "product_1": "shopify://products/cosmic-meditation-set",
+        "product_2": "shopify://products/rice-toner",
+        "product_3": "shopify://products/orchid-lotion",
+        "savings_label": "Bundle saving",
+        "button_text": "Add bundle to cart",
+        "unavailable_text": "Currently unavailable",
+        "founder_heading": "Why this ritual",
+        "founder_note": "<p>Some seasons ask for less doing and more listening. This bundle is the meditation set I built first, paired with the products I reach for when I need a slower morning. Made by hand in our Canadian facility.</p>",
+        "show_reviews": true,
+        "reviews_heading": "Reviews",
+        "show_reviews_empty": true,
+        "reviews_empty_text": "Reviews will appear here once your review widget is installed.",
+        "cross_sell_heading": "Explore more rituals",
+        "cross_title_1": "The Morning Ritual",
+        "cross_desc_1": "Begin the day with five minutes of stillness and skin that feels alive.",
+        "cross_link_1": "shopify://pages/morning-ritual",
+        "cross_title_2": "The Survivor's Set",
+        "cross_desc_2": "Made for skin that's been through something. Fragrance-free, gentle, gift-ready.",
+        "cross_link_2": "shopify://pages/survivors-set",
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": ["bundle"]
+}

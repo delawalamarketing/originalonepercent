@@ -1770,6 +1770,50 @@
       },
       {
         "type": "header",
+        "content": "Free shipping bar"
+      },
+      {
+        "type": "number",
+        "id": "free_shipping_threshold",
+        "label": "Free shipping threshold (CAD)",
+        "info": "Set to 0 to hide the bar.",
+        "default": 95
+      },
+      {
+        "type": "text",
+        "id": "free_shipping_progress_text",
+        "label": "Progress message",
+        "info": "Use {{ remaining }} as a placeholder for the remaining amount.",
+        "default": "You're {{ remaining }} away from free shipping."
+      },
+      {
+        "type": "text",
+        "id": "free_shipping_unlocked_text",
+        "label": "Unlocked message",
+        "default": "You've unlocked free shipping!"
+      },
+      {
+        "type": "header",
+        "content": "Cart cross-sell"
+      },
+      {
+        "type": "text",
+        "id": "cart_cross_sell_heading",
+        "label": "Heading",
+        "default": "Complete your ritual"
+      },
+      {
+        "type": "product",
+        "id": "cart_cross_sell_1",
+        "label": "Product 1"
+      },
+      {
+        "type": "product",
+        "id": "cart_cross_sell_2",
+        "label": "Product 2"
+      },
+      {
+        "type": "header",
         "content": "t:content.product_media"
       },
       {

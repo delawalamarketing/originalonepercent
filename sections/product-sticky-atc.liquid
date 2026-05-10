@@ -1,0 +1,237 @@
+{%- liquid
+  assign product = closest.product
+  assign current_variant = product.selected_or_first_available_variant
+-%}
+
+{%- if product != blank -%}
+  <div
+    class="product-sticky-atc"
+    data-product-sticky-atc
+    data-handle="{{ product.handle }}"
+    aria-hidden="true"
+  >
+    <div class="product-sticky-atc__inner">
+      {%- if product.featured_media != blank -%}
+        {{
+          product.featured_media
+          | image_url: width: 96
+          | image_tag:
+            loading: 'lazy',
+            sizes: '48px',
+            widths: '48, 96, 144',
+            class: 'product-sticky-atc__image',
+            alt: ''
+        }}
+      {%- endif -%}
+
+      <div class="product-sticky-atc__details">
+        <p class="product-sticky-atc__title">{{ product.title }}</p>
+        <p class="product-sticky-atc__price" data-sticky-price>
+          {%- if current_variant.compare_at_price > current_variant.price -%}
+            <span class="product-sticky-atc__price-sale">{{ current_variant.price | money }}</span>
+            <span class="product-sticky-atc__price-compare"><s>{{ current_variant.compare_at_price | money }}</s></span>
+          {%- else -%}
+            {{ current_variant.price | money }}
+          {%- endif -%}
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="product-sticky-atc__btn"
+        data-sticky-atc-button
+        aria-label="{{ section.settings.button_text | default: 'Add to cart' | escape }} (sticky bar — scrolls to product form)"
+      >
+        {{ section.settings.button_text | default: 'Add to cart' }}
+      </button>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const bar = document.querySelector('[data-product-sticky-atc]');
+      if (!bar) return;
+
+      // Find Horizon's buy-buttons block (or fall back to product form/title).
+      const target =
+        document.querySelector('add-to-cart-component') ||
+        document.querySelector('buy-buttons-component') ||
+        document.querySelector('[id*="buy_buttons"]') ||
+        document.querySelector('product-form-component') ||
+        document.querySelector('product-information');
+
+      if (!target) return;
+
+      const reveal = () => {
+        bar.classList.add('product-sticky-atc--visible');
+        bar.setAttribute('aria-hidden', 'false');
+      };
+      const hide = () => {
+        bar.classList.remove('product-sticky-atc--visible');
+        bar.setAttribute('aria-hidden', 'true');
+      };
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              hide();
+            } else if (entry.boundingClientRect.top < 0) {
+              reveal();
+            } else {
+              hide();
+            }
+          });
+        },
+        { threshold: 0, rootMargin: '0px 0px -40% 0px' }
+      );
+      observer.observe(target);
+
+      // Click → smooth scroll back to the form area.
+      bar.querySelector('[data-sticky-atc-button]').addEventListener('click', () => {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+
+      // Update price when Horizon dispatches a variant change event.
+      const priceEl = bar.querySelector('[data-sticky-price]');
+      document.addEventListener('variant:change', (e) => {
+        if (!priceEl || !e.detail || !e.detail.variant) return;
+        const v = e.detail.variant;
+        priceEl.textContent = v.price_formatted || '';
+      });
+    })();
+  </script>
+{%- endif -%}
+
+{% stylesheet %}
+  .product-sticky-atc {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+    background: var(--color-background, #fff);
+    color: var(--color-foreground, #111);
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
+    transform: translateY(100%);
+    transition: transform 240ms ease;
+    padding-block: 0.65rem;
+    padding-block-end: max(0.65rem, env(safe-area-inset-bottom));
+    padding-inline: 1rem;
+    display: none;
+  }
+
+  .product-sticky-atc--visible {
+    transform: translateY(0);
+  }
+
+  .product-sticky-atc__inner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    max-width: 600px;
+    margin-inline: auto;
+  }
+
+  .product-sticky-atc__image {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .product-sticky-atc__details {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .product-sticky-atc__title {
+    font-size: 0.85rem;
+    line-height: 1.2;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+
+  .product-sticky-atc__price {
+    font-size: 0.85rem;
+    margin: 0;
+    opacity: 0.85;
+  }
+
+  .product-sticky-atc__price-sale {
+    color: #b00020;
+    font-weight: 500;
+    margin-right: 0.4rem;
+  }
+
+  .product-sticky-atc__price-compare {
+    opacity: 0.6;
+  }
+
+  .product-sticky-atc__btn {
+    flex-shrink: 0;
+    padding: 0.85rem 1.25rem;
+    background: var(--color-foreground, #111);
+    color: var(--color-background, #fff);
+    border: 1px solid var(--color-foreground, #111);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 2px;
+    min-height: 44px;
+    transition: background-color 150ms ease, color 150ms ease;
+  }
+
+  .product-sticky-atc__btn:hover,
+  .product-sticky-atc__btn:focus-visible {
+    background: transparent;
+    color: var(--color-foreground, #111);
+  }
+
+  .product-sticky-atc__btn:focus-visible {
+    outline: 2px solid var(--color-foreground, #111);
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 749px) {
+    .product-sticky-atc {
+      display: block;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Sticky ATC (mobile)",
+  "tag": "section",
+  "class": "section-product-sticky-atc",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Renders a fixed bottom bar on mobile only (≤749 px). Reveals when the customer scrolls past the main add-to-cart button. Clicking it smoothly scrolls back to the buy buttons."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button label",
+      "default": "Add to cart"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sticky ATC (mobile)"
+    }
+  ]
+}
+{% endschema %}

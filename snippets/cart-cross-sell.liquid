@@ -1,0 +1,240 @@
+{%- doc -%}
+  Renders a "Complete your ritual" cross-sell row in the cart.
+  Shows up to 2 products from theme settings (cart_cross_sell_1, cart_cross_sell_2)
+  that are NOT already in the cart. Each product has a quick-add button.
+{%- enddoc -%}
+
+{%- liquid
+  assign candidates = '' | split: ''
+  if settings.cart_cross_sell_1 != blank
+    assign candidates = candidates | concat: settings.cart_cross_sell_1
+  endif
+  if settings.cart_cross_sell_2 != blank
+    assign candidates = candidates | concat: settings.cart_cross_sell_2
+  endif
+
+  assign in_cart_handles = ''
+  for item in cart.items
+    assign in_cart_handles = in_cart_handles | append: item.product.handle | append: ','
+  endfor
+
+  assign products_to_show = '' | split: ''
+  for product in candidates
+    unless in_cart_handles contains product.handle
+      assign products_to_show = products_to_show | concat: product
+    endunless
+  endfor
+-%}
+
+{%- if products_to_show.size > 0 and cart.empty? == false -%}
+  <div class="cart-cross-sell" data-cart-cross-sell>
+    <p class="cart-cross-sell__heading">{{ settings.cart_cross_sell_heading | default: 'Complete your ritual' }}</p>
+    <p class="visually-hidden" data-cart-cross-sell-status aria-live="polite" aria-atomic="true"></p>
+
+    <ul class="cart-cross-sell__list" role="list">
+      {%- for product in products_to_show limit: 2 -%}
+        {%- assign variant = product.selected_or_first_available_variant -%}
+        <li class="cart-cross-sell__item">
+          <a href="{{ product.url }}" class="cart-cross-sell__media-link" aria-label="{{ product.title | escape }}">
+            {%- if product.featured_media != blank -%}
+              {{
+                product.featured_media
+                | image_url: width: 200
+                | image_tag:
+                  loading: 'lazy',
+                  sizes: '64px',
+                  widths: '64, 128, 192',
+                  class: 'cart-cross-sell__image',
+                  alt: product.featured_media.alt | default: product.title
+              }}
+            {%- else -%}
+              <div class="cart-cross-sell__image cart-cross-sell__image--placeholder" aria-hidden="true"></div>
+            {%- endif -%}
+          </a>
+          <div class="cart-cross-sell__details">
+            <a href="{{ product.url }}" class="cart-cross-sell__title">{{ product.title }}</a>
+            <p class="cart-cross-sell__price">{{ variant.price | money }}</p>
+          </div>
+          {%- if variant.available -%}
+            <button
+              type="button"
+              class="cart-cross-sell__add"
+              data-cart-cross-sell-add
+              data-variant-id="{{ variant.id }}"
+              aria-label="Add {{ product.title | escape }} to cart"
+            >
+              <span data-cart-cross-sell-add-text>+ Add</span>
+            </button>
+          {%- else -%}
+            <span class="cart-cross-sell__sold-out">Sold out</span>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+
+  <script>
+    (function () {
+      const wrapper = document.querySelector('[data-cart-cross-sell]');
+      if (!wrapper || wrapper.dataset.bound === 'true') return;
+      wrapper.dataset.bound = 'true';
+
+      wrapper.addEventListener('click', async (e) => {
+        const btn = e.target.closest('[data-cart-cross-sell-add]');
+        if (!btn) return;
+
+        const id = btn.dataset.variantId;
+        if (!id) return;
+
+        const textEl = btn.querySelector('[data-cart-cross-sell-add-text]');
+        const statusEl = wrapper.querySelector('[data-cart-cross-sell-status]');
+        const productName = btn.getAttribute('aria-label') ? btn.getAttribute('aria-label').replace(/^Add |to cart$/g, '') : '';
+        const original = textEl ? textEl.textContent : '';
+        btn.disabled = true;
+        if (textEl) textEl.textContent = 'Adding…';
+        if (statusEl) statusEl.textContent = '';
+
+        try {
+          const res = await fetch('/cart/add.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify({ items: [{ id: parseInt(id, 10), quantity: 1 }] }),
+          });
+          if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.description || err.message || 'Could not add product.');
+          }
+          // Trigger Horizon's cart re-render via its standard event.
+          document.dispatchEvent(new CustomEvent('cart:refresh'));
+          document.dispatchEvent(new CustomEvent('cart:update'));
+          if (textEl) textEl.textContent = 'Added';
+          if (statusEl) statusEl.textContent = 'Added to cart.';
+        } catch (err) {
+          if (textEl) textEl.textContent = 'Try again';
+          if (statusEl) statusEl.textContent = 'Could not add item. Please try again.';
+          btn.disabled = false;
+          console.error('[cart-cross-sell]', err);
+        }
+      });
+    })();
+  </script>
+{%- endif -%}
+
+{% stylesheet %}
+  .cart-cross-sell {
+    margin-block: var(--margin-md, 1rem);
+    padding-block-start: var(--padding-md, 1rem);
+    border-block-start: 1px solid rgb(var(--color-border-rgb, 0 0 0) / 0.15);
+  }
+
+  .cart-cross-sell__heading {
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0 0 0.75rem;
+    opacity: 0.75;
+    font-weight: 500;
+  }
+
+  .cart-cross-sell__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .cart-cross-sell__item {
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .cart-cross-sell__media-link {
+    display: block;
+    width: 56px;
+    height: 56px;
+    border-radius: 4px;
+    overflow: hidden;
+    background: rgb(var(--color-foreground-rgb, 0 0 0) / 0.04);
+  }
+
+  .cart-cross-sell__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cart-cross-sell__image--placeholder {
+    background: linear-gradient(135deg, rgb(var(--color-foreground-rgb, 0 0 0) / 0.08), rgb(var(--color-foreground-rgb, 0 0 0) / 0.02));
+  }
+
+  .cart-cross-sell__details {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .cart-cross-sell__title {
+    font-size: 0.875rem;
+    line-height: 1.3;
+    color: var(--color-foreground);
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .cart-cross-sell__title:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .cart-cross-sell__price {
+    font-size: 0.8125rem;
+    margin: 0;
+    opacity: 0.85;
+  }
+
+  .cart-cross-sell__add {
+    flex-shrink: 0;
+    padding: 0.5rem 0.75rem;
+    background: transparent;
+    color: var(--color-foreground);
+    border: 1px solid currentColor;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 2px;
+    min-height: 36px;
+    transition: background-color 150ms ease, color 150ms ease;
+  }
+
+  .cart-cross-sell__add:hover:not(:disabled),
+  .cart-cross-sell__add:focus-visible:not(:disabled) {
+    background: var(--color-foreground);
+    color: var(--color-background);
+  }
+
+  .cart-cross-sell__add:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+
+  .cart-cross-sell__add:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .cart-cross-sell__sold-out {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.6;
+  }
+{% endstylesheet %}

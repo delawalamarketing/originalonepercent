@@ -1,0 +1,835 @@
+{%- liquid
+  assign p1 = section.settings.product_1
+  assign p2 = section.settings.product_2
+  assign p3 = section.settings.product_3
+
+  assign v1 = p1.selected_or_first_available_variant
+  assign v2 = p2.selected_or_first_available_variant
+  assign v3 = p3.selected_or_first_available_variant
+
+  assign sum_price = 0
+  if v1 != blank
+    assign sum_price = sum_price | plus: v1.price
+  endif
+  if v2 != blank
+    assign sum_price = sum_price | plus: v2.price
+  endif
+  if v3 != blank
+    assign sum_price = sum_price | plus: v3.price
+  endif
+
+  assign bundle_price_override = section.settings.bundle_price | times: 100
+  if section.settings.bundle_price > 0
+    assign bundle_price = bundle_price_override
+  else
+    assign bundle_price = sum_price
+  endif
+
+  assign savings = sum_price | minus: bundle_price
+  assign all_available = true
+  if v1 == blank or v1.available == false
+    assign all_available = false
+  endif
+  if v2 == blank or v2.available == false
+    assign all_available = false
+  endif
+  if v3 == blank or v3.available == false
+    assign all_available = false
+  endif
+-%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<section class="bundle-page color-{{ section.settings.color_scheme }}" aria-labelledby="bundle-page-heading-{{ section.id }}">
+  {%- comment -%} Hero {%- endcomment -%}
+  <div class="bundle-page__hero">
+    {%- if section.settings.hero_image != blank -%}
+      {{
+        section.settings.hero_image
+        | image_url: width: 2400
+        | image_tag:
+          loading: 'eager',
+          fetchpriority: 'high',
+          sizes: '100vw',
+          widths: '480, 768, 1024, 1440, 1920, 2400',
+          class: 'bundle-page__hero-image',
+          alt: section.settings.hero_image.alt | default: section.settings.heading
+      }}
+    {%- else -%}
+      <div class="bundle-page__hero-image bundle-page__hero-image--placeholder" aria-hidden="true"></div>
+    {%- endif -%}
+    <div class="bundle-page__hero-overlay" aria-hidden="true"></div>
+    <div class="bundle-page__hero-inner page-width">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="bundle-page__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h1 class="bundle-page__heading" id="bundle-page-heading-{{ section.id }}">{{ section.settings.heading }}</h1>
+      {%- endif -%}
+      {%- if section.settings.subheading != blank -%}
+        <p class="bundle-page__subheading">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <div class="bundle-page__body page-width">
+    {%- comment -%} What's inside {%- endcomment -%}
+    <div class="bundle-page__inside">
+      <h2 class="bundle-page__section-heading">{{ section.settings.inside_heading }}</h2>
+      <div class="bundle-page__products">
+        {%- for product in p1, p2, p3 -%}
+          {%- if product != blank -%}
+            <article class="bundle-page__product">
+              <a href="{{ product.url }}" class="bundle-page__product-link">
+                <div class="bundle-page__product-media">
+                  {%- if product.featured_media != blank -%}
+                    {{
+                      product.featured_media
+                      | image_url: width: 600
+                      | image_tag:
+                        loading: 'lazy',
+                        sizes: '(min-width: 750px) 33vw, 100vw',
+                        widths: '300, 400, 600',
+                        class: 'bundle-page__product-image',
+                        alt: product.featured_media.alt | default: product.title
+                    }}
+                  {%- else -%}
+                    <div class="bundle-page__product-image bundle-page__product-image--placeholder" aria-hidden="true"></div>
+                  {%- endif -%}
+                </div>
+                <div class="bundle-page__product-body">
+                  <h3 class="bundle-page__product-title">{{ product.title }}</h3>
+                  <p class="bundle-page__product-price">{{ product.selected_or_first_available_variant.price | money }}</p>
+                </div>
+              </a>
+            </article>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    {%- comment -%} Add to cart panel {%- endcomment -%}
+    <div class="bundle-page__atc">
+      <div class="bundle-page__atc-pricing">
+        {%- if savings > 0 -%}
+          <p class="bundle-page__atc-savings">
+            <span class="bundle-page__atc-badge">{{ section.settings.savings_label | default: 'Bundle saving' }}</span>
+            <span><s>{{ sum_price | money }}</s></span>
+          </p>
+        {%- endif -%}
+        <p class="bundle-page__atc-price">{{ bundle_price | money }}</p>
+        {%- if savings > 0 -%}
+          <p class="bundle-page__atc-saved">You save {{ savings | money }}</p>
+        {%- endif -%}
+      </div>
+
+      {%- if all_available -%}
+        <button
+          type="button"
+          class="bundle-page__atc-button"
+          data-bundle-add
+          data-variant-1="{{ v1.id }}"
+          data-variant-2="{{ v2.id }}"
+          data-variant-3="{{ v3.id }}"
+        >
+          <span data-bundle-add-text>{{ section.settings.button_text | default: 'Add bundle to cart' }}</span>
+        </button>
+        <p class="bundle-page__atc-message" data-bundle-message hidden role="status"></p>
+      {%- else -%}
+        <button type="button" class="bundle-page__atc-button" disabled>
+          {{ section.settings.unavailable_text | default: 'Currently unavailable' }}
+        </button>
+      {%- endif -%}
+
+      {%- comment -%} If using Shopify Bundles native app, replace this button with the bundle product's add-to-cart form. {%- endcomment -%}
+    </div>
+
+    {%- comment -%} Founder ritual note {%- endcomment -%}
+    {%- if section.settings.founder_note != blank -%}
+      <div class="bundle-page__founder">
+        {%- if section.settings.founder_heading != blank -%}
+          <h2 class="bundle-page__section-heading">{{ section.settings.founder_heading }}</h2>
+        {%- endif -%}
+        <div class="bundle-page__founder-body rte">{{ section.settings.founder_note }}</div>
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} Reviews placeholder {%- endcomment -%}
+    {%- if section.settings.show_reviews -%}
+      <div class="bundle-page__reviews">
+        <h2 class="bundle-page__section-heading">{{ section.settings.reviews_heading }}</h2>
+        <!-- APP EMBED: Reviews widget (Judge.me / Loox / Klaviyo) -->
+        {%- if section.settings.show_reviews_empty -%}
+          <p class="bundle-page__reviews-empty">{{ section.settings.reviews_empty_text }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} Cross-sell {%- endcomment -%}
+    {%- assign has_cross_sell = false -%}
+    {%- if section.settings.cross_link_1 != blank or section.settings.cross_link_2 != blank -%}
+      {%- assign has_cross_sell = true -%}
+    {%- endif -%}
+    {%- if has_cross_sell -%}
+      <div class="bundle-page__cross-sell">
+        <h2 class="bundle-page__section-heading">{{ section.settings.cross_sell_heading }}</h2>
+        <div class="bundle-page__cross-grid">
+          {%- if section.settings.cross_link_1 != blank -%}
+            <a href="{{ section.settings.cross_link_1 }}" class="bundle-page__cross-card">
+              {%- if section.settings.cross_image_1 != blank -%}
+                {{
+                  section.settings.cross_image_1
+                  | image_url: width: 1000
+                  | image_tag:
+                    loading: 'lazy',
+                    sizes: '(min-width: 750px) 50vw, 100vw',
+                    widths: '375, 540, 750, 1000',
+                    class: 'bundle-page__cross-image',
+                    alt: section.settings.cross_image_1.alt | default: section.settings.cross_title_1
+                }}
+              {%- else -%}
+                <div class="bundle-page__cross-image bundle-page__cross-image--placeholder" aria-hidden="true"></div>
+              {%- endif -%}
+              <div class="bundle-page__cross-body">
+                <h3 class="bundle-page__cross-title">{{ section.settings.cross_title_1 }}</h3>
+                {%- if section.settings.cross_desc_1 != blank -%}
+                  <p class="bundle-page__cross-desc">{{ section.settings.cross_desc_1 }}</p>
+                {%- endif -%}
+              </div>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.cross_link_2 != blank -%}
+            <a href="{{ section.settings.cross_link_2 }}" class="bundle-page__cross-card">
+              {%- if section.settings.cross_image_2 != blank -%}
+                {{
+                  section.settings.cross_image_2
+                  | image_url: width: 1000
+                  | image_tag:
+                    loading: 'lazy',
+                    sizes: '(min-width: 750px) 50vw, 100vw',
+                    widths: '375, 540, 750, 1000',
+                    class: 'bundle-page__cross-image',
+                    alt: section.settings.cross_image_2.alt | default: section.settings.cross_title_2
+                }}
+              {%- else -%}
+                <div class="bundle-page__cross-image bundle-page__cross-image--placeholder" aria-hidden="true"></div>
+              {%- endif -%}
+              <div class="bundle-page__cross-body">
+                <h3 class="bundle-page__cross-title">{{ section.settings.cross_title_2 }}</h3>
+                {%- if section.settings.cross_desc_2 != blank -%}
+                  <p class="bundle-page__cross-desc">{{ section.settings.cross_desc_2 }}</p>
+                {%- endif -%}
+              </div>
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<script>
+  (function () {
+    const btn = document.querySelector('[data-bundle-add]');
+    if (!btn) return;
+
+    const ids = [
+      btn.dataset.variant1,
+      btn.dataset.variant2,
+      btn.dataset.variant3,
+    ].filter(Boolean);
+
+    if (ids.length === 0) return;
+
+    const textEl = btn.querySelector('[data-bundle-add-text]');
+    const msgEl = document.querySelector('[data-bundle-message]');
+    const originalText = textEl ? textEl.textContent : '';
+
+    btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      if (textEl) textEl.textContent = 'Adding…';
+      if (msgEl) {
+        msgEl.hidden = true;
+        msgEl.textContent = '';
+        msgEl.classList.remove('bundle-page__atc-message--error');
+      }
+
+      try {
+        const res = await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            items: ids.map((id) => ({ id: parseInt(id, 10), quantity: 1 })),
+          }),
+        });
+
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.description || err.message || 'Could not add bundle to cart.');
+        }
+
+        // Try to open Horizon's cart drawer if available; otherwise navigate to /cart.
+        document.dispatchEvent(new CustomEvent('cart:refresh'));
+        const drawerToggle = document.querySelector('cart-drawer-component, [data-cart-drawer-toggle]');
+        if (drawerToggle && typeof drawerToggle.open === 'function') {
+          drawerToggle.open();
+        } else if (drawerToggle && drawerToggle.dispatchEvent) {
+          drawerToggle.dispatchEvent(new CustomEvent('cart:open', { bubbles: true }));
+          // Fallback: redirect after short pause if drawer didn't open.
+          setTimeout(() => {
+            if (!document.querySelector('.cart-drawer.is-open, cart-drawer-component[open]')) {
+              window.location.href = '/cart';
+            }
+          }, 600);
+        } else {
+          window.location.href = '/cart';
+        }
+
+        if (textEl) textEl.textContent = 'Added!';
+        if (msgEl) {
+          msgEl.hidden = false;
+          msgEl.textContent = 'Bundle added to your cart.';
+        }
+        setTimeout(() => {
+          btn.disabled = false;
+          if (textEl) textEl.textContent = originalText;
+        }, 1500);
+      } catch (e) {
+        btn.disabled = false;
+        if (textEl) textEl.textContent = originalText;
+        if (msgEl) {
+          msgEl.hidden = false;
+          msgEl.classList.add('bundle-page__atc-message--error');
+          msgEl.textContent = e.message || 'Something went wrong. Please try again.';
+        }
+      }
+    });
+  })();
+</script>
+
+{% stylesheet %}
+  .bundle-page {
+    --bundle-gap: 4rem;
+  }
+
+  .bundle-page__hero {
+    position: relative;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .bundle-page__hero-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+  }
+
+  .bundle-page__hero-image--placeholder {
+    background: linear-gradient(135deg, #2a2a2a, #555);
+  }
+
+  .bundle-page__hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: -1;
+  }
+
+  .bundle-page__hero-inner {
+    width: 100%;
+    color: #fff;
+    padding-block: 4rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .bundle-page__eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin: 0;
+    opacity: 0.95;
+  }
+
+  .bundle-page__heading {
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin: 0;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: #fff;
+  }
+
+  .bundle-page__subheading {
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    margin: 0;
+    max-width: 540px;
+    opacity: 0.95;
+  }
+
+  .bundle-page__body {
+    padding-block: 3.5rem 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: var(--bundle-gap);
+  }
+
+  .bundle-page__section-heading {
+    font-size: clamp(1.375rem, 2.5vw, 1.75rem);
+    margin: 0 0 1.5rem;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    text-align: center;
+  }
+
+  .bundle-page__products {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .bundle-page__product-link {
+    color: inherit;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .bundle-page__product-link:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+  }
+
+  .bundle-page__product-media {
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 4px;
+  }
+
+  .bundle-page__product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .bundle-page__product-image--placeholder {
+    background: linear-gradient(135deg, rgba(0,0,0,0.08), rgba(0,0,0,0.02));
+  }
+
+  .bundle-page__product-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .bundle-page__product-title {
+    font-size: 1rem;
+    margin: 0;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+
+  .bundle-page__product-price {
+    font-size: 0.95rem;
+    margin: 0;
+    opacity: 0.85;
+  }
+
+  .bundle-page__atc {
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 4px;
+    padding: 1.75rem 1.5rem;
+    text-align: center;
+    max-width: 480px;
+    margin-inline: auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .bundle-page__atc-pricing {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .bundle-page__atc-savings {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    font-size: 0.85rem;
+    opacity: 0.8;
+  }
+
+  .bundle-page__atc-badge {
+    background: #111;
+    color: #fff;
+    padding: 0.2rem 0.55rem;
+    border-radius: 2px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .bundle-page__atc-price {
+    font-size: 1.75rem;
+    margin: 0;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .bundle-page__atc-saved {
+    font-size: 0.85rem;
+    margin: 0;
+    color: #b00020;
+    font-weight: 500;
+  }
+
+  .bundle-page__atc-button {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    background: var(--color-foreground, #111);
+    color: var(--color-background, #fff);
+    border: 1px solid var(--color-foreground, #111);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 2px;
+    min-height: 48px;
+    transition: background-color 150ms ease, color 150ms ease;
+  }
+
+  .bundle-page__atc-button:hover:not(:disabled),
+  .bundle-page__atc-button:focus-visible:not(:disabled) {
+    background: transparent;
+    color: var(--color-foreground, #111);
+  }
+
+  .bundle-page__atc-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .bundle-page__atc-button:focus-visible {
+    outline: 2px solid var(--color-foreground, #111);
+    outline-offset: 3px;
+  }
+
+  .bundle-page__atc-message {
+    margin: 0;
+    font-size: 0.875rem;
+  }
+
+  .bundle-page__atc-message--error {
+    color: #b00020;
+  }
+
+  .bundle-page__founder {
+    max-width: 640px;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .bundle-page__founder-body {
+    font-size: 1rem;
+    line-height: 1.65;
+    opacity: 0.9;
+  }
+
+  .bundle-page__founder-body p {
+    margin: 0 0 0.75rem;
+  }
+
+  .bundle-page__founder-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  .bundle-page__reviews-empty {
+    text-align: center;
+    opacity: 0.6;
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  .bundle-page__cross-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .bundle-page__cross-card {
+    color: inherit;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    border-radius: 4px;
+    overflow: hidden;
+    transition: transform 200ms ease;
+  }
+
+  .bundle-page__cross-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .bundle-page__cross-card:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+  }
+
+  .bundle-page__cross-image {
+    aspect-ratio: 4 / 3;
+    width: 100%;
+    object-fit: cover;
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+  .bundle-page__cross-image--placeholder {
+    background: linear-gradient(135deg, rgba(0,0,0,0.08), rgba(0,0,0,0.02));
+  }
+
+  .bundle-page__cross-body {
+    padding: 1rem 0;
+  }
+
+  .bundle-page__cross-title {
+    font-size: 1.0625rem;
+    margin: 0 0 0.25rem;
+    font-weight: 500;
+  }
+
+  .bundle-page__cross-desc {
+    font-size: 0.9375rem;
+    margin: 0;
+    opacity: 0.85;
+    line-height: 1.5;
+  }
+
+  @media (min-width: 750px) {
+    .bundle-page__products {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .bundle-page__cross-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Bundle page",
+  "tag": "section",
+  "class": "section-bundle-page",
+  "enabled_on": {
+    "templates": ["page"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Hero"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "info": "Optional — leave blank to hide."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The bundle"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "info": "Optional — leave blank to hide."
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image"
+    },
+    {
+      "type": "header",
+      "content": "What's inside"
+    },
+    {
+      "type": "text",
+      "id": "inside_heading",
+      "label": "Section heading",
+      "default": "What's inside"
+    },
+    {
+      "type": "product",
+      "id": "product_1",
+      "label": "Product 1"
+    },
+    {
+      "type": "product",
+      "id": "product_2",
+      "label": "Product 2"
+    },
+    {
+      "type": "product",
+      "id": "product_3",
+      "label": "Product 3"
+    },
+    {
+      "type": "header",
+      "content": "Pricing & ATC"
+    },
+    {
+      "type": "number",
+      "id": "bundle_price",
+      "label": "Bundle price (CAD)",
+      "info": "Leave blank or 0 to charge the sum of individual prices."
+    },
+    {
+      "type": "text",
+      "id": "savings_label",
+      "label": "Savings badge",
+      "default": "Bundle saving"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "ATC button label",
+      "default": "Add bundle to cart"
+    },
+    {
+      "type": "text",
+      "id": "unavailable_text",
+      "label": "Unavailable label",
+      "default": "Currently unavailable"
+    },
+    {
+      "type": "header",
+      "content": "Founder ritual note"
+    },
+    {
+      "type": "text",
+      "id": "founder_heading",
+      "label": "Heading",
+      "default": "Why this ritual"
+    },
+    {
+      "type": "richtext",
+      "id": "founder_note",
+      "label": "Body"
+    },
+    {
+      "type": "header",
+      "content": "Reviews"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_reviews",
+      "label": "Show reviews",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "reviews_heading",
+      "label": "Reviews heading",
+      "default": "Reviews"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_reviews_empty",
+      "label": "Show empty-state text",
+      "default": true,
+      "info": "Disable once your reviews app is live."
+    },
+    {
+      "type": "textarea",
+      "id": "reviews_empty_text",
+      "label": "Empty-state text",
+      "default": "Reviews will appear here once your review widget is installed."
+    },
+    {
+      "type": "header",
+      "content": "Cross-sell"
+    },
+    {
+      "type": "text",
+      "id": "cross_sell_heading",
+      "label": "Cross-sell heading",
+      "default": "Explore more rituals"
+    },
+    {
+      "type": "image_picker",
+      "id": "cross_image_1",
+      "label": "Card 1 — image"
+    },
+    {
+      "type": "text",
+      "id": "cross_title_1",
+      "label": "Card 1 — title"
+    },
+    {
+      "type": "textarea",
+      "id": "cross_desc_1",
+      "label": "Card 1 — description"
+    },
+    {
+      "type": "url",
+      "id": "cross_link_1",
+      "label": "Card 1 — link"
+    },
+    {
+      "type": "image_picker",
+      "id": "cross_image_2",
+      "label": "Card 2 — image"
+    },
+    {
+      "type": "text",
+      "id": "cross_title_2",
+      "label": "Card 2 — title"
+    },
+    {
+      "type": "textarea",
+      "id": "cross_desc_2",
+      "label": "Card 2 — description"
+    },
+    {
+      "type": "url",
+      "id": "cross_link_2",
+      "label": "Card 2 — link"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bundle page"
+    }
+  ]
+}
+{% endschema %}

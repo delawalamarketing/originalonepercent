@@ -1,8 +1,10 @@
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
-<section class="certifications color-{{ section.settings.color_scheme }} page-width" aria-label="{{ section.settings.heading | default: 'Certifications' | escape }}">
+<section class="certifications color-{{ section.settings.color_scheme }} page-width" aria-labelledby="certifications-heading-{{ section.id }}">
   {%- if section.settings.heading != blank -%}
-    <p class="certifications__heading">{{ section.settings.heading }}</p>
+    <p class="certifications__heading" id="certifications-heading-{{ section.id }}" role="heading" aria-level="2">{{ section.settings.heading }}</p>
+  {%- else -%}
+    <h2 class="visually-hidden" id="certifications-heading-{{ section.id }}">Certifications</h2>
   {%- endif -%}
 
   {%- assign cert_fallbacks = 'cert-ecocert.svg,cert-gmp.svg,cert-iso.svg,cert-canada.svg' | split: ',' -%}

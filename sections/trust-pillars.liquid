@@ -1,8 +1,10 @@
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
-<section class="trust-pillars color-{{ section.settings.color_scheme }} page-width">
+<section class="trust-pillars color-{{ section.settings.color_scheme }} page-width" aria-labelledby="trust-pillars-heading-{{ section.id }}">
   {%- if section.settings.heading != blank -%}
-    <h2 class="trust-pillars__heading">{{ section.settings.heading }}</h2>
+    <h2 class="trust-pillars__heading" id="trust-pillars-heading-{{ section.id }}">{{ section.settings.heading }}</h2>
+  {%- else -%}
+    <h2 class="visually-hidden" id="trust-pillars-heading-{{ section.id }}">Why Original 1%</h2>
   {%- endif -%}
 
   {%- assign pillar_icons = 'maple,certificate,esthetician' | split: ',' -%}

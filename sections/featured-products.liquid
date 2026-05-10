@@ -1,6 +1,6 @@
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
-<section class="featured-products color-{{ section.settings.color_scheme }} page-width">
+<section class="featured-products color-{{ section.settings.color_scheme }} page-width" aria-labelledby="featured-products-heading-{{ section.id }}">
   {%- if section.settings.heading != blank or section.settings.cta_text != blank -%}
     <header class="featured-products__header">
       <div class="featured-products__heading-group">
@@ -8,7 +8,9 @@
           <p class="featured-products__eyebrow">{{ section.settings.eyebrow }}</p>
         {%- endif -%}
         {%- if section.settings.heading != blank -%}
-          <h2 class="featured-products__heading">{{ section.settings.heading }}</h2>
+          <h2 class="featured-products__heading" id="featured-products-heading-{{ section.id }}">{{ section.settings.heading }}</h2>
+        {%- else -%}
+          <h2 class="visually-hidden" id="featured-products-heading-{{ section.id }}">Featured products</h2>
         {%- endif -%}
       </div>
       {%- if section.settings.cta_text != blank -%}
@@ -167,8 +169,8 @@
     position: absolute;
     top: 0.5rem;
     left: 0.5rem;
-    background: #111;
-    color: #fff;
+    background: rgb(var(--color-foreground-rgb, 0 0 0));
+    color: rgb(var(--color-background-rgb, 255 255 255));
     padding: 0.3rem 0.6rem;
     font-size: 0.7rem;
     font-weight: 500;

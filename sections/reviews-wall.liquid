@@ -1,12 +1,14 @@
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
-<section class="reviews-wall color-{{ section.settings.color_scheme }} page-width">
+<section class="reviews-wall color-{{ section.settings.color_scheme }} page-width" aria-labelledby="reviews-wall-heading-{{ section.id }}">
   <header class="reviews-wall__header">
     {%- if section.settings.eyebrow != blank -%}
       <p class="reviews-wall__eyebrow">{{ section.settings.eyebrow }}</p>
     {%- endif -%}
     {%- if section.settings.heading != blank -%}
-      <h2 class="reviews-wall__heading">{{ section.settings.heading }}</h2>
+      <h2 class="reviews-wall__heading" id="reviews-wall-heading-{{ section.id }}">{{ section.settings.heading }}</h2>
+    {%- else -%}
+      <h2 class="visually-hidden" id="reviews-wall-heading-{{ section.id }}">Community reviews</h2>
     {%- endif -%}
     {%- if section.settings.subheading != blank -%}
       <p class="reviews-wall__subheading">{{ section.settings.subheading }}</p>
@@ -85,21 +87,25 @@
     display: inline-flex;
     align-items: center;
     padding: 0.85rem 1.5rem;
-    background: currentColor;
+    background: var(--color-foreground, #111);
     color: var(--color-background, #fff);
+    border: 1px solid var(--color-foreground, #111);
     text-decoration: none;
     border-radius: 2px;
     font-size: 0.9375rem;
     font-weight: 500;
     min-height: 44px;
+    transition: background-color 150ms ease, color 150ms ease;
   }
 
-  .reviews-wall__empty-cta > * {
-    color: var(--color-background, #fff);
+  .reviews-wall__empty-cta:hover,
+  .reviews-wall__empty-cta:focus-visible {
+    background: transparent;
+    color: var(--color-foreground, #111);
   }
 
   .reviews-wall__empty-cta:focus-visible {
-    outline: 2px solid currentColor;
+    outline: 2px solid var(--color-foreground, #111);
     outline-offset: 3px;
   }
 {% endstylesheet %}

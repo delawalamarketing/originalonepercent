@@ -7,7 +7,7 @@
 <section
   class="hero-founder color-{{ section.settings.color_scheme }} hero-founder--align-{{ text_alignment }}"
   style="--hero-overlay-opacity: {{ overlay_opacity | divided_by: 100.0 }}; --hero-min-height: {{ section.settings.min_height }}vh;"
-  aria-label="{{ section.settings.heading | escape }}"
+  aria-labelledby="hero-founder-heading-{{ section.id }}"
 >
   {%- comment -%} REPLACE: founder portrait, soft natural light {%- endcomment -%}
   {%- if section.settings.background_image != blank -%}
@@ -42,7 +42,7 @@
     {%- endif -%}
 
     {%- if section.settings.heading != blank -%}
-      <h1 class="hero-founder__heading">{{ section.settings.heading }}</h1>
+      <h1 class="hero-founder__heading" id="hero-founder-heading-{{ section.id }}">{{ section.settings.heading }}</h1>
     {%- endif -%}
 
     {%- if section.settings.subheading != blank -%}

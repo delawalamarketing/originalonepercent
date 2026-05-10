@@ -1,0 +1,75 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "blocks": {
+        "heading": {
+          "type": "text",
+          "name": "Title",
+          "settings": {
+            "text": "<h1>{{ closest.page.title }}</h1>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "h2",
+            "font": "var(--font-primary--family)",
+            "font_size": "",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "page-content": {
+          "type": "page-content",
+          "settings": {},
+          "blocks": {}
+        }
+      },
+      "block_order": ["heading", "page-content"],
+      "settings": {
+        "content_direction": "column",
+        "gap": 32,
+        "color_scheme": "",
+        "padding-block-start": 40,
+        "padding-block-end": 80
+      }
+    },
+    "certifications": {
+      "type": "certifications",
+      "blocks": {
+        "badge_ecocert": {
+          "type": "badge",
+          "settings": { "alt_text": "ECOCERT", "label": "ECOCERT" }
+        },
+        "badge_hc": {
+          "type": "badge",
+          "settings": { "alt_text": "Health Canada GMP", "label": "Health Canada GMP" }
+        },
+        "badge_iso": {
+          "type": "badge",
+          "settings": { "alt_text": "ISO certified", "label": "ISO" }
+        },
+        "badge_canada": {
+          "type": "badge",
+          "settings": { "alt_text": "Made in Canada", "label": "Made in Canada" }
+        }
+      },
+      "block_order": ["badge_ecocert", "badge_hc", "badge_iso", "badge_canada"],
+      "settings": {
+        "heading": "Independently certified",
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": ["main", "certifications"]
+}
