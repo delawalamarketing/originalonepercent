@@ -116,6 +116,7 @@
     "founder_strip": {
       "type": "founder-strip",
       "settings": {
+        "portrait_image": "shopify://shop_images/Original_1_Iman_Navab.png",
         "media_position": "left",
         "eyebrow": "Why this exists",
         "heading": "Two generations in service of natural health.",
