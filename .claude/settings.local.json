@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(shopify version *)",
+      "Bash(npm --version)",
+      "Bash(netstat -ano)",
+      "Bash(taskkill /PID 24504 /F)",
+      "PowerShell(Stop-Process -Id 24504 -Force)",
+      "Bash(ls -la \"C:/Projects/theme_export__originalonepercent-com-horizon__10MAY2026-0954am/Original 1% SVGs/\")",
+      "Bash(cp \"C:/Projects/theme_export__originalonepercent-com-horizon__10MAY2026-0954am/Original 1% SVGs/OWNER POTRAIT.PNG\" \"C:/Projects/theme_export__originalonepercent-com-horizon__10MAY2026-0954am/assets/founder-portrait.png\")",
+      "Bash(cp \"C:/Projects/theme_export__originalonepercent-com-horizon__10MAY2026-0954am/Original 1% SVGs/Morning Ritual.png\" \"C:/Projects/theme_export__originalonepercent-com-horizon__10MAY2026-0954am/assets/ritual-morning.png\")",
+      "Bash(cp \"C:/Projects/theme_export__originalonepercent-com-horizon__10MAY2026-0954am/Original 1% SVGs/Inner Work Bundle.png\" \"C:/Projects/theme_export__originalonepercent-com-horizon__10MAY2026-0954am/assets/ritual-inner-work.png\")",
+      "Bash(cp \"C:/Projects/theme_export__originalonepercent-com-horizon__10MAY2026-0954am/Original 1% SVGs/Survivor's Set.jpg\" \"C:/Projects/theme_export__originalonepercent-com-horizon__10MAY2026-0954am/assets/ritual-survivors.jpg\")",
+      "Bash(cp \"C:/Projects/theme_export__originalonepercent-com-horizon__10MAY2026-0954am/Original 1% SVGs/Original 1% From Junk to Genius.png\" \"C:/Projects/theme_export__originalonepercent-com-horizon__10MAY2026-0954am/assets/book-junk-to-genius.png\")",
+      "PowerShell($pid = \\(Get-NetTCPConnection -LocalPort 9292 -ErrorAction SilentlyContinue\\).OwningProcess; if \\($pid\\) { Stop-Process -Id $pid -Force; \"Killed PID $pid on port 9292\" } else { \"Port 9292 is already free\" })"
+    ]
+  }
+}

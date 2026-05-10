@@ -1,0 +1,342 @@
+{%- liquid
+  assign overlay_opacity = section.settings.overlay_opacity | default: 40
+  assign text_alignment = section.settings.text_alignment | default: 'center'
+-%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<section
+  class="hero-founder color-{{ section.settings.color_scheme }} hero-founder--align-{{ text_alignment }}"
+  style="--hero-overlay-opacity: {{ overlay_opacity | divided_by: 100.0 }}; --hero-min-height: {{ section.settings.min_height }}vh;"
+  aria-label="{{ section.settings.heading | escape }}"
+>
+  {%- comment -%} REPLACE: founder portrait, soft natural light {%- endcomment -%}
+  {%- if section.settings.background_image != blank -%}
+    {{
+      section.settings.background_image
+      | image_url: width: 2400
+      | image_tag:
+        loading: 'eager',
+        fetchpriority: 'high',
+        sizes: '100vw',
+        widths: '480, 768, 1024, 1440, 1920, 2400',
+        class: 'hero-founder__image',
+        alt: section.settings.background_image.alt | default: section.settings.heading
+    }}
+  {%- else -%}
+    <img
+      src="{{ 'founder-portrait.png' | asset_url }}"
+      alt="Founder of Original 1%"
+      class="hero-founder__image"
+      loading="eager"
+      fetchpriority="high"
+      width="2400"
+      height="1600"
+    >
+  {%- endif -%}
+
+  <div class="hero-founder__overlay" aria-hidden="true"></div>
+
+  <div class="hero-founder__inner page-width">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="hero-founder__eyebrow">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.heading != blank -%}
+      <h1 class="hero-founder__heading">{{ section.settings.heading }}</h1>
+    {%- endif -%}
+
+    {%- if section.settings.subheading != blank -%}
+      <p class="hero-founder__subheading">{{ section.settings.subheading }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.cta_primary_text != blank or section.settings.cta_secondary_text != blank -%}
+      <div class="hero-founder__ctas">
+        {%- if section.settings.cta_primary_text != blank -%}
+          <a
+            href="{{ section.settings.cta_primary_link | default: '#' }}"
+            class="hero-founder__btn hero-founder__btn--primary"
+          >
+            {{ section.settings.cta_primary_text }}
+          </a>
+        {%- endif -%}
+        {%- if section.settings.cta_secondary_text != blank -%}
+          <a
+            href="{{ section.settings.cta_secondary_link | default: '#' }}"
+            class="hero-founder__btn hero-founder__btn--secondary"
+          >
+            {{ section.settings.cta_secondary_text }}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .hero-founder {
+    position: relative;
+    width: 100%;
+    min-height: var(--hero-min-height, 80vh);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero-founder__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+  }
+
+  .hero-founder__image--placeholder {
+    background: linear-gradient(135deg, #2a2a2a, #444);
+  }
+
+  .hero-founder__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, var(--hero-overlay-opacity, 0.4));
+    z-index: -1;
+  }
+
+  .hero-founder__inner {
+    width: 100%;
+    color: #fff;
+    padding-block: 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    max-width: 720px;
+  }
+
+  .hero-founder--align-left .hero-founder__inner {
+    text-align: left;
+    margin-inline: 0 auto;
+  }
+
+  .hero-founder--align-center .hero-founder__inner {
+    text-align: center;
+    margin-inline: auto;
+    align-items: center;
+  }
+
+  .hero-founder__eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin: 0;
+    opacity: 0.9;
+  }
+
+  .hero-founder__heading {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.15;
+    margin: 0;
+    color: #fff;
+    letter-spacing: -0.01em;
+  }
+
+  .hero-founder__subheading {
+    font-size: clamp(1rem, 1.6vw, 1.125rem);
+    line-height: 1.55;
+    margin: 0;
+    max-width: 560px;
+    opacity: 0.95;
+  }
+
+  .hero-founder--align-center .hero-founder__subheading {
+    margin-inline: auto;
+  }
+
+  .hero-founder__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .hero-founder--align-center .hero-founder__ctas {
+    justify-content: center;
+  }
+
+  .hero-founder__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.95rem 1.75rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 2px;
+    transition:
+      background-color 150ms ease,
+      color 150ms ease,
+      border-color 150ms ease;
+    min-height: 48px;
+  }
+
+  .hero-founder__btn--primary {
+    background: #fff;
+    color: #111;
+    border: 1px solid #fff;
+  }
+
+  .hero-founder__btn--primary:hover,
+  .hero-founder__btn--primary:focus-visible {
+    background: transparent;
+    color: #fff;
+  }
+
+  .hero-founder__btn--secondary {
+    background: transparent;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.85);
+  }
+
+  .hero-founder__btn--secondary:hover,
+  .hero-founder__btn--secondary:focus-visible {
+    background: #fff;
+    color: #111;
+  }
+
+  .hero-founder__btn:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 749px) {
+    .hero-founder__inner {
+      padding-block: 3rem;
+    }
+
+    .hero-founder__heading {
+      font-size: 2rem;
+    }
+
+    .hero-founder__ctas {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .hero-founder__btn {
+      width: 100%;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Hero — Founder",
+  "tag": "section",
+  "class": "section-hero-founder",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "Original 1% by DYNAMISE"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Skincare and stillness, made by hand in Canada."
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Formulated by a certified esthetician and breast cancer survivor in our own Health-Canada-registered Canadian facility."
+    },
+    {
+      "type": "header",
+      "content": "Primary CTA"
+    },
+    {
+      "type": "text",
+      "id": "cta_primary_text",
+      "label": "Button label",
+      "default": "Shop the Cosmic Meditation Set"
+    },
+    {
+      "type": "url",
+      "id": "cta_primary_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Secondary CTA"
+    },
+    {
+      "type": "text",
+      "id": "cta_secondary_text",
+      "label": "Button label",
+      "default": "Read our story"
+    },
+    {
+      "type": "url",
+      "id": "cta_secondary_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image",
+      "info": "Recommended: founder portrait, soft natural light. 2400×1600 minimum."
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "min_height",
+      "label": "Minimum height",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 80
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero — Founder"
+    }
+  ]
+}
+{% endschema %}

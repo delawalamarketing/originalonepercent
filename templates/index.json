@@ -1,0 +1,203 @@
+{
+  "sections": {
+    "hero_founder": {
+      "type": "hero-founder",
+      "settings": {
+        "eyebrow": "Original 1% by DYNAMISE",
+        "heading": "Skincare and stillness, made by hand in Canada.",
+        "subheading": "Formulated by a certified esthetician and breast cancer survivor in our own Health-Canada-registered Canadian facility.",
+        "cta_primary_text": "Shop the Cosmic Meditation Set",
+        "cta_primary_link": "shopify://products/cosmic-meditation-set",
+        "cta_secondary_text": "Read our story",
+        "cta_secondary_link": "shopify://pages/about",
+        "overlay_opacity": 40,
+        "min_height": 80,
+        "text_alignment": "center",
+        "color_scheme": "scheme-6"
+      }
+    },
+    "trust_pillars": {
+      "type": "trust-pillars",
+      "blocks": {
+        "pillar_1": {
+          "type": "pillar",
+          "settings": {
+            "heading": "Made in Canada",
+            "description": "Hand-formulated and bottled in our Ontario lab."
+          }
+        },
+        "pillar_2": {
+          "type": "pillar",
+          "settings": {
+            "heading": "ECOCERT & Health Canada GMP",
+            "description": "Manufactured under independent quality certifications."
+          }
+        },
+        "pillar_3": {
+          "type": "pillar",
+          "settings": {
+            "heading": "Formulated by an Esthetician",
+            "description": "Every product designed by a certified skincare professional."
+          }
+        }
+      },
+      "block_order": ["pillar_1", "pillar_2", "pillar_3"],
+      "settings": {
+        "color_scheme": "scheme-1"
+      }
+    },
+    "rituals": {
+      "type": "rituals",
+      "blocks": {
+        "ritual_morning": {
+          "type": "ritual",
+          "settings": {
+            "title": "The Morning Ritual",
+            "description": "Begin the day with five minutes of stillness and skin that feels alive.",
+            "cta_text": "Build this ritual",
+            "link": "shopify://pages/morning-ritual"
+          }
+        },
+        "ritual_inner_work": {
+          "type": "ritual",
+          "settings": {
+            "title": "The Inner Work Bundle",
+            "description": "For the seasons when the work is internal.",
+            "cta_text": "Build this ritual",
+            "link": "shopify://pages/inner-work"
+          }
+        },
+        "ritual_survivors": {
+          "type": "ritual",
+          "settings": {
+            "title": "The Survivor's Set",
+            "description": "Made for skin that's been through something. Fragrance-free, gentle, gift-ready.",
+            "cta_text": "Build this ritual",
+            "link": "shopify://pages/survivors-set"
+          }
+        }
+      },
+      "block_order": ["ritual_morning", "ritual_inner_work", "ritual_survivors"],
+      "settings": {
+        "eyebrow": "The Rituals",
+        "heading": "Three rituals, made for the seasons of you.",
+        "subheading": "Curated bundles for stillness, healing, and the work that's quietly internal.",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "founder_strip": {
+      "type": "founder-strip",
+      "settings": {
+        "media_position": "left",
+        "eyebrow": "Why this exists",
+        "heading": "I built this from the bottom of a hospital bed.",
+        "body": "<p>After a breast cancer diagnosis, I went looking for skincare I could actually trust on my changed, sensitive skin — and couldn't find it. So I built it. Original 1% is what came out of that search: clean, esthetician-formulated, made by hand in our own Canadian facility. The 1% is the part of you that's irreplaceable. This is for that part.</p>",
+        "signature": "— Founder, Original 1%",
+        "cta_text": "Read the full story",
+        "cta_link": "shopify://pages/about",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "featured_products": {
+      "type": "featured-products",
+      "settings": {
+        "heading": "Made with care, in small batches.",
+        "cta_text": "Shop all",
+        "cta_link": "shopify://collections/all",
+        "product_list": [
+          "shopify://products/cosmic-meditation-set",
+          "shopify://products/rice-toner",
+          "shopify://products/rice-silk-serum",
+          "shopify://products/orchid-lotion"
+        ],
+        "columns_desktop": 4,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "reviews_wall": {
+      "type": "reviews-wall",
+      "settings": {
+        "heading": "Stories from our community.",
+        "subheading": "",
+        "show_empty_state": true,
+        "empty_text": "Be one of the first to share yours.",
+        "empty_cta_text": "Shop our products",
+        "empty_cta_link": "shopify://collections/all",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "books_feature": {
+      "type": "books-feature",
+      "blocks": {
+        "book_1": {
+          "type": "book",
+          "settings": {
+            "title": "Original 1%: From Junk to Genius",
+            "cta_text": "Read a chapter free"
+          }
+        },
+        "book_2": {
+          "type": "book",
+          "settings": {
+            "title": "Saqi: A Tale of Divine Presence",
+            "cta_text": "Read a chapter free"
+          }
+        }
+      },
+      "block_order": ["book_1", "book_2"],
+      "settings": {
+        "eyebrow": "Read",
+        "heading": "Books from our founder.",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "email_capture": {
+      "type": "email-capture",
+      "settings": {
+        "heading": "Get our free 7-day meditation series and clean-beauty ingredient guide.",
+        "placeholder": "you@example.com",
+        "button_text": "Send it to me",
+        "success_message": "Thank you. Check your inbox for the first email.",
+        "privacy_text": "We'll never share your email. Unsubscribe anytime.",
+        "color_scheme": "scheme-2"
+      }
+    },
+    "certifications": {
+      "type": "certifications",
+      "blocks": {
+        "badge_ecocert": {
+          "type": "badge",
+          "settings": { "alt_text": "ECOCERT", "label": "ECOCERT" }
+        },
+        "badge_hc": {
+          "type": "badge",
+          "settings": { "alt_text": "Health Canada GMP", "label": "Health Canada GMP" }
+        },
+        "badge_iso": {
+          "type": "badge",
+          "settings": { "alt_text": "ISO certified", "label": "ISO" }
+        },
+        "badge_canada": {
+          "type": "badge",
+          "settings": { "alt_text": "Made in Canada", "label": "Made in Canada" }
+        }
+      },
+      "block_order": ["badge_ecocert", "badge_hc", "badge_iso", "badge_canada"],
+      "settings": {
+        "heading": "Independently certified",
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": [
+    "hero_founder",
+    "trust_pillars",
+    "rituals",
+    "founder_strip",
+    "featured_products",
+    "reviews_wall",
+    "books_feature",
+    "email_capture",
+    "certifications"
+  ]
+}

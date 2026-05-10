@@ -1,0 +1,5 @@
+ORIGINALONEPERCENT-IMPLEMENTATION.md
+package.json
+package-lock.json
+node_modules/
+.claude/

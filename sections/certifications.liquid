@@ -1,0 +1,206 @@
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<section class="certifications color-{{ section.settings.color_scheme }} page-width" aria-label="{{ section.settings.heading | default: 'Certifications' | escape }}">
+  {%- if section.settings.heading != blank -%}
+    <p class="certifications__heading">{{ section.settings.heading }}</p>
+  {%- endif -%}
+
+  {%- assign cert_fallbacks = 'cert-ecocert.svg,cert-gmp.svg,cert-iso.svg,cert-canada.svg' | split: ',' -%}
+  <ul class="certifications__list" role="list">
+    {%- for block in section.blocks -%}
+      {%- assign fallback_cert = cert_fallbacks[forloop.index0] -%}
+      <li class="certifications__item" {{ block.shopify_attributes }}>
+        {%- if block.settings.link != blank -%}
+          <a href="{{ block.settings.link }}" class="certifications__link" rel="noopener" target="_blank">
+        {%- endif -%}
+
+        {%- if block.settings.badge_image != blank -%}
+          {{
+            block.settings.badge_image
+            | image_url: width: 200
+            | image_tag:
+              loading: 'lazy',
+              widths: '100, 150, 200, 300',
+              sizes: '120px',
+              class: 'certifications__badge',
+              alt: block.settings.alt_text | default: 'Certification'
+          }}
+        {%- elsif fallback_cert != blank -%}
+          <img
+            src="{{ fallback_cert | asset_url }}"
+            alt="{{ block.settings.alt_text | default: 'Certification' | escape }}"
+            class="certifications__badge"
+            loading="lazy"
+            width="200"
+            height="100"
+          >
+        {%- else -%}
+          <span class="certifications__placeholder" aria-hidden="true">{{ block.settings.alt_text | default: 'Badge' }}</span>
+        {%- endif -%}
+
+        {%- if block.settings.label != blank -%}
+          <span class="certifications__label">{{ block.settings.label }}</span>
+        {%- endif -%}
+
+        {%- if block.settings.link != blank -%}
+          </a>
+        {%- endif -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+</section>
+
+{% stylesheet %}
+  .certifications {
+    padding-block: 2.5rem;
+  }
+
+  .certifications__heading {
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin: 0 0 1.5rem;
+    opacity: 0.7;
+  }
+
+  .certifications__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem 2.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .certifications__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .certifications__link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: inherit;
+    text-decoration: none;
+    transition: opacity 150ms ease;
+  }
+
+  .certifications__link:hover {
+    opacity: 0.7;
+  }
+
+  .certifications__link:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 4px;
+  }
+
+  .certifications__badge {
+    height: 56px;
+    width: auto;
+    object-fit: contain;
+    opacity: 0.85;
+  }
+
+  .certifications__placeholder {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 56px;
+    padding: 0 1rem;
+    border: 1px dashed currentColor;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.5;
+  }
+
+  .certifications__label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.75;
+  }
+
+  @media (min-width: 750px) {
+    .certifications__list {
+      gap: 2rem 3rem;
+    }
+
+    .certifications__badge {
+      height: 64px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Certifications",
+  "tag": "section",
+  "class": "section-certifications",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Independently certified"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "Badge",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "badge_image",
+          "label": "Badge image",
+          "info": "SVG or PNG, transparent background recommended."
+        },
+        {
+          "type": "text",
+          "id": "alt_text",
+          "label": "Alt text"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Caption (optional)"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link (optional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Certifications",
+      "blocks": [
+        { "type": "badge", "settings": { "alt_text": "ECOCERT", "label": "ECOCERT" } },
+        { "type": "badge", "settings": { "alt_text": "Health Canada GMP", "label": "Health Canada GMP" } },
+        { "type": "badge", "settings": { "alt_text": "ISO certified", "label": "ISO" } },
+        { "type": "badge", "settings": { "alt_text": "Made in Canada", "label": "Made in Canada" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

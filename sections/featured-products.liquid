@@ -1,0 +1,278 @@
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<section class="featured-products color-{{ section.settings.color_scheme }} page-width">
+  {%- if section.settings.heading != blank or section.settings.cta_text != blank -%}
+    <header class="featured-products__header">
+      <div class="featured-products__heading-group">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="featured-products__eyebrow">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="featured-products__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+      </div>
+      {%- if section.settings.cta_text != blank -%}
+        <a href="{{ section.settings.cta_link | default: '/collections/all' }}" class="featured-products__view-all">
+          {{ section.settings.cta_text }}
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M3 7h8m0 0L8 4m3 3L8 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      {%- endif -%}
+    </header>
+  {%- endif -%}
+
+  <div class="featured-products__grid" style="--columns-desktop: {{ section.settings.columns_desktop }};">
+    {%- assign products = section.settings.product_list -%}
+    {%- assign max_products = section.settings.columns_desktop | at_most: 4 -%}
+    {%- for product in products limit: max_products -%}
+      <article class="featured-products__card">
+        <a href="{{ product.url }}" class="featured-products__card-link" aria-label="{{ product.title | escape }}">
+          <div class="featured-products__card-media">
+            {%- if product.featured_media != blank -%}
+              {{
+                product.featured_media
+                | image_url: width: 1000
+                | image_tag:
+                  loading: 'lazy',
+                  sizes: '(min-width: 990px) 25vw, (min-width: 750px) 50vw, 100vw',
+                  widths: '300, 400, 540, 750, 1000',
+                  class: 'featured-products__card-image',
+                  alt: product.featured_media.alt | default: product.title
+              }}
+            {%- else -%}
+              <div class="featured-products__card-image featured-products__card-image--placeholder" aria-hidden="true"></div>
+            {%- endif -%}
+
+            {%- unless product.available -%}
+              <span class="featured-products__pill">Sold out</span>
+            {%- endunless -%}
+          </div>
+
+          <div class="featured-products__card-body">
+            <h3 class="featured-products__card-title">{{ product.title }}</h3>
+            <div class="featured-products__card-price">
+              {%- if product.compare_at_price > product.price -%}
+                <span class="featured-products__price-sale">{{ product.price | money }}</span>
+                <span class="featured-products__price-compare"><s>{{ product.compare_at_price | money }}</s></span>
+              {%- else -%}
+                <span>{{ product.price | money }}</span>
+              {%- endif -%}
+            </div>
+          </div>
+        </a>
+      </article>
+    {%- else -%}
+      <p class="featured-products__empty">Add products in the Customizer to populate this section.</p>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .featured-products {
+    padding-block: 4rem;
+  }
+
+  .featured-products__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .featured-products__eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin: 0 0 0.5rem;
+    opacity: 0.7;
+  }
+
+  .featured-products__heading {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin: 0;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  .featured-products__view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    color: inherit;
+  }
+
+  .featured-products__view-all:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+  }
+
+  .featured-products__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem 0.75rem;
+  }
+
+  .featured-products__empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    opacity: 0.7;
+    padding: 2rem;
+  }
+
+  .featured-products__card-link {
+    display: flex;
+    flex-direction: column;
+    color: inherit;
+    text-decoration: none;
+    height: 100%;
+  }
+
+  .featured-products__card-link:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+
+  .featured-products__card-media {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 2px;
+  }
+
+  .featured-products__card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 400ms ease;
+  }
+
+  .featured-products__card-image--placeholder {
+    background: linear-gradient(135deg, rgba(0,0,0,0.08), rgba(0,0,0,0.02));
+  }
+
+  .featured-products__card-link:hover .featured-products__card-image {
+    transform: scale(1.03);
+  }
+
+  .featured-products__pill {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    background: #111;
+    color: #fff;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 2px;
+  }
+
+  .featured-products__card-body {
+    padding: 0.75rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .featured-products__card-title {
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .featured-products__card-price {
+    font-size: 0.95rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: baseline;
+  }
+
+  .featured-products__price-sale {
+    color: #b00020;
+    font-weight: 500;
+  }
+
+  .featured-products__price-compare {
+    opacity: 0.6;
+  }
+
+  @media (min-width: 750px) {
+    .featured-products__grid {
+      grid-template-columns: repeat(var(--columns-desktop, 4), 1fr);
+      gap: 1.5rem 1rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Featured products",
+  "tag": "section",
+  "class": "section-featured-products",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "info": "Optional — leave blank to hide."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Made with care, in small batches."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "View-all CTA label",
+      "default": "Shop all"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "View-all CTA link"
+    },
+    {
+      "type": "product_list",
+      "id": "product_list",
+      "label": "Products",
+      "limit": 4
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns (desktop)",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured products"
+    }
+  ]
+}
+{% endschema %}

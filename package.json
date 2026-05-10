@@ -1,0 +1,14 @@
+{
+  "name": "originalonepercent-horizon-theme",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "shopify theme dev --store=u0qqc6-hn.myshopify.com",
+    "push": "shopify theme push --store=u0qqc6-hn.myshopify.com",
+    "pull": "shopify theme pull --store=u0qqc6-hn.myshopify.com",
+    "check": "shopify theme check"
+  },
+  "devDependencies": {
+    "@shopify/cli": "^3"
+  }
+}
