@@ -47,6 +47,7 @@
         "pillar_3": {
           "type": "pillar",
           "settings": {
+            "icon": "shopify://shop_images/esthetician_SVG.svg",
             "heading": "Formulated by an Esthetician",
             "description": "Every product designed by a certified skincare professional."
           }
