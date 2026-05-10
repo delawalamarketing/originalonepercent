@@ -69,6 +69,7 @@
         "ritual_morning": {
           "type": "ritual",
           "settings": {
+            "image": "shopify://shop_images/Untitled_design.png",
             "title": "The Morning Ritual",
             "description": "Begin the day with five minutes of stillness and skin that feels alive.",
             "price": "",
